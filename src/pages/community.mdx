@@ -1,0 +1,572 @@
+export const description =
+  'On this page, we’ll dive into the different community endpoints you can use to manage community programmatically.'
+
+# Community
+
+Community are where communities live in Protocol — they are a collection of contacts and groups you're talking to all at once. On this page, we'll dive into the different community endpoints you can use to manage community programmatically. We'll look at how to query, create, update, and delete community. {{ className: 'lead' }}
+
+## The community model
+
+The community model contains all the information about your community, including what contacts are in the community and the community's name, description, and avatar.
+
+### Properties
+
+<Properties>
+  <Property name="id" type="string">
+    Unique identifier for the community.
+  </Property>
+  <Property name="name" type="string">
+    The name for the community.
+  </Property>
+  <Property name="description" type="string">
+    The description for the community.
+  </Property>
+  <Property name="avatar_url" type="string">
+    The avatar image URL for the community.
+  </Property>
+  <Property name="conversation_id" type="string">
+    Unique identifier for the conversation that belongs to the community.
+  </Property>
+  <Property name="owner" type="object">
+    The owner of the community.
+  </Property>
+  <Property name="comunity_admin" type="array">
+    An array of contact objects that are admin of the community.
+  </Property>
+  <Property name="groups" type="array">
+    An array of groups objects that are members of the community.
+  </Property>
+  <Property name="contacts" type="array">
+    An array of contact objects that are members of the community.
+  </Property>
+  <Property name="created_at" type="timestamp">
+    Timestamp of when the community was created.
+  </Property>
+  <Property name="archived_at" type="timestamp">
+    Timestamp of when the community was archived.
+  </Property>
+</Properties>
+
+---
+
+## List all community {{ tag: 'GET', label: '/v1/community' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a list of all your community.
+
+    ### Optional attributes
+
+
+    <Properties>
+      <Property name="archived" type="boolean">
+        Only show community that are archived when set to `true`.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/community">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/community \
+      -H "Authorization: Bearer {token}" \
+      -d limit=10
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.community.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.community.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->community->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "id": "l7cGNIBKZiNJ6wqF",
+          "name": "Plaza Hotel",
+          "description": "World-renowned.",
+          "avatar_url": "https://assets.protocol.chat/avatars/plazahotel.jpg",
+          "conversation_id": "ZYjVAbCE9g5XRlra",
+          "contacts": [
+            {
+              "username": "Hector"
+              // ...
+            },
+            {
+              "username": "Cedric"
+              // ...
+            },
+            {
+              "username": "Hester"
+              // ...
+            },
+            {
+              "username": "Cliff"
+              // ...
+            }
+          ],
+          "groups": [
+              {
+                "group_id" : "23frujhu4",
+                "name" : "TIF GG",
+                "avatar_url": "https://assets.protocol.chat/avatars/tifgg.jpg",
+                ....
+              },
+              {
+                "group_id" : "33hfopjj4",
+                "name" : "TIF 2021",
+                "avatar_url": "https://assets.protocol.chat/avatars/tif.jpg",
+                ....
+              }
+          ],
+          "created_at": 692233200,
+          "archived_at": null
+        },
+        "owner" : {
+          "id": "hSIhXBhNe8X1d8Et",
+          "username": "FrankMcCallister",
+          "phone_number": "1-800-759-3000",
+          "avatar_url": "https://assets.protocol.chat/avatars/frank.jpg",
+          "display_name": "Frank",
+          // ....
+        },
+        "community_admin" : [
+          {
+            "id": "hSIhXBhNe8X1d8Et"
+            // ...
+          },
+        ]
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a community {{ tag: 'POST', label: '/v1/community' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to create a new community conversation between you and a community of your Protocol contacts and groups.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="owner" type="object">
+        The owner of the community.
+      </Property>
+      <Property name="name" type="string">
+        The name for the community.
+      </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="description" type="string">
+        The description for the community.
+      </Property>
+      <Property name="avatar_url" type="string">
+        The avatar image URL for the community.
+      </Property>
+      <Property name="contacts" type="array">
+        An array of contact objects that are members of the community.
+      </Property>
+      <Property name="groups" type="array">
+        An array of groups objects that are members of the community.
+      </Property>
+      <Property name="community_admin" type="array">
+        An array of contacts objects that are admin of the community.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/community">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/community \
+      -H "Authorization: Bearer {token}" \
+      -d name="Plaza Hotel"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.community.create({
+      name: 'Plaza Hotel',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.community.create(name="Plaza Hotel")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->community->create([
+      'name' => 'Plaza Hotel',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "l7cGNIBKZiNJ6wqF",
+      "name": "Plaza Hotel",
+      "description": null,
+      "avatar_url": null,
+      "conversation_id": "ZYjVAbCE9g5XRlra",
+      "contacts": [],
+      "groups": [
+          {
+            "group_id" : "23frujhu4",
+            "name" : "TIF GG",
+            "avatar_url": "https://assets.protocol.chat/avatars/tifgg.jpg",
+            ....
+          },
+          {
+            "group_id" : "33hfopjj4",
+            "name" : "TIF 2021",
+            "avatar_url": "https://assets.protocol.chat/avatars/tif.jpg",
+            ....
+          }
+      ],
+      "created_at": 692233200,
+      "archived_at": null,
+      "owner" : {
+          "id": "hSIhXBhNe8X1d8Et",
+          "username": "FrankMcCallister",
+          "phone_number": "1-800-759-3000",
+          "avatar_url": "https://assets.protocol.chat/avatars/frank.jpg",
+          "display_name": "Frank",
+          // ....
+      },
+      "community_admin" : [
+          {
+            "id": "hSIhXBhNe8X1d8Et"
+            // ...
+          },
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a community {{ tag: 'GET', label: '/v1/community/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a community by providing the community id. Refer to [the list](#the-community-model) at the top of this page to see which properties are included with community objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/community/L7cGNIBKZiNJ6wqF">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/community/L7cGNIBKZiNJ6wqF \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.community.get('L7cGNIBKZiNJ6wqF')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.community.get("L7cGNIBKZiNJ6wqF")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->community->get('L7cGNIBKZiNJ6wqF');
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "l7cGNIBKZiNJ6wqF",
+      "name": "Plaza Hotel",
+      "description": "World-renowned.",
+      "avatar_url": "https://assets.protocol.chat/avatars/plazahotel.jpg",
+      "conversation_id": "ZYjVAbCE9g5XRlra",
+      "contacts": [
+        {
+          "username": "Hector"
+          // ...
+        },
+        {
+          "username": "Cedric"
+          // ...
+        },
+        {
+          "username": "Hester"
+          // ...
+        },
+        {
+          "username": "Cliff"
+          // ...
+        }
+      ],
+      "groups": [
+          {
+            "group_id" : "23frujhu4",
+            "name" : "TIF GG",
+            "avatar_url": "https://assets.protocol.chat/avatars/tifgg.jpg",
+            // ....
+          },
+          {
+            "group_id" : "33hfopjj4",
+            "name" : "TIF 2021",
+            "avatar_url": "https://assets.protocol.chat/avatars/tif.jpg",
+            // ....
+          }
+      ],
+      "owner" : {
+          "id": "hSIhXBhNe8X1d8Et",
+          "username": "FrankMcCallister",
+          "phone_number": "1-800-759-3000",
+          "avatar_url": "https://assets.protocol.chat/avatars/frank.jpg",
+          "display_name": "Frank",
+          // ....
+      },
+      "community_admin" : [
+          {
+            "id": "hSIhXBhNe8X1d8Et"
+            // ...
+          },
+      ],
+      "created_at": 692233200,
+      "archived_at": null
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a community {{ tag: 'PUT', label: '/v1/community/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a community. Examples of updates are changing the name, description, and avatar or adding and removing contacts or groups from the community.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The new name for the community.
+      </Property>
+      <Property name="description" type="string">
+        The new description for the community.
+      </Property>
+      <Property name="avatar_url" type="string">
+        The new avatar image URL for the community.
+      </Property>
+      <Property name="contacts" type="array">
+        An array of contact objects that are members of the community.
+      </Property>
+      <Property name="groups" type="array">
+        An array of group objects that are members of the community.
+      </Property>
+      <Property name="archived_at" type="timestamp">
+        Timestamp of when the community was archived.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/community/L7cGNIBKZiNJ6wqF">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PUT https://api.protocol.chat/v1/community/L7cGNIBKZiNJ6wqF \
+      -H "Authorization: Bearer {token}" \
+      -d description="The finest in New York."
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.community.update('L7cGNIBKZiNJ6wqF', {
+        description: 'The finest in New York.',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.community.update("L7cGNIBKZiNJ6wqF", description="The finest in New York.")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->community->update('L7cGNIBKZiNJ6wqF', [
+      'description' => 'The finest in New York.',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "l7cGNIBKZiNJ6wqF",
+      "name": "Plaza Hotel",
+      "description": "The finest in New York.",
+      "avatar_url": "https://assets.protocol.chat/avatars/plazahotel.jpg",
+      "conversation_id": "ZYjVAbCE9g5XRlra",
+      "contacts": [
+        {
+          "username": "Hector"
+          // ...
+        },
+        {
+          "username": "Cedric"
+          // ...
+        },
+        {
+          "username": "Hester"
+          // ...
+        },
+        {
+          "username": "Cliff"
+          // ...
+        }
+      ],
+      "groups": [
+          {
+            "group_id" : "23frujhu4",
+            "name" : "TIF GG",
+            "avatar_url": "https://assets.protocol.chat/avatars/tifgg.jpg",
+            ....
+          },
+          {
+            "group_id" : "33hfopjj4",
+            "name" : "TIF 2021",
+            "avatar_url": "https://assets.protocol.chat/avatars/tif.jpg",
+            ....
+          }
+      ],
+      "owner" : {
+          "id": "hSIhXBhNe8X1d8Et",
+          "username": "FrankMcCallister",
+          "phone_number": "1-800-759-3000",
+          "avatar_url": "https://assets.protocol.chat/avatars/frank.jpg",
+          "display_name": "Frank",
+          // ....
+      },
+      "community_admin" : [
+          {
+            "id": "hSIhXBhNe8X1d8Et"
+            // ...
+          },
+      ],
+      "created_at": 692233200,
+      "archived_at": null
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a community {{ tag: 'DELETE', label: '/v1/community/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete community. Note: This will permanently delete the community, including the messages — archive it instead if you want to be able to restore it later.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/community/L7cGNIBKZiNJ6wqF">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE https://api.protocol.chat/v1/community/L7cGNIBKZiNJ6wqF \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.community.delete('L7cGNIBKZiNJ6wqF')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.community.delete("L7cGNIBKZiNJ6wqF")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->community->delete('L7cGNIBKZiNJ6wqF');
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>

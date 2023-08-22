@@ -1,0 +1,291 @@
+export const description =
+  'On this page, we’ll dive into the different conversation endpoints you can use to manage conversations programmatically.'
+
+# Story
+
+Dengan endpoint ini, pengguna dapat membuat story yang bertahan 24 jam. Selain itu pengguna juga dapat melihat story yang dibuat dari pengguna lain yang kontaknya saling tersimpan
+
+## The story model
+
+Story model menyimpan semua informasi yang berkiatan dengan story yang dibuat dari pengguna. Pengguna dapat membuat, menerima, dan membuka story pengguna lain yang kontaknya saling tersimpan. Selain itu pembuat story juga akan mendapat informasi jumlah penonton yang melihat story-nya.
+
+### Properties
+
+<Properties>
+  <Property name="id" type="string">
+     Sebuah identifikasi unik untuk setiap cerita.
+  </Property>
+  <Property name="contact_id" type="string">
+    Unique identifier for the other contact in the story.
+  </Property>
+  <Property name="story_type" type="string">
+    Type story yang dibuat, bisa berupa text, audio, atau media (foto atau video).
+  </Property>
+  <Property name="media_url" type="string">
+    URL untuk story yang dibuat.
+  </Property>
+  <Property name="media_tyoe" type="string">
+    Type story yang berupa media. Dapat berupa image atau video.
+  </Property>
+  <Property name="created_at" type="timestamp">
+    Timestamp of when the conversation was created.
+  </Property>
+  <Property name="is_muted" type="boolean">
+    Apakah story di muted atau tidak
+  </Property>
+  <Property name="muted_at" type="timestamp">
+    Timestamp of when the story was muted.
+  </Property>
+
+</Properties>
+
+---
+
+## List all story {{ tag: 'GET', label: '/v1/story' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a list of all your contacts story (in a conversation if a conversation id is provided). By default, a maximum of ten messages are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="story_id" type="string">
+        Limit to messages from a given conversation.
+      </Property>
+      <Property name="limit" type="integer">
+        Limit the number of messages returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/story">
+
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.messages.list()
+    ```
+
+
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "received_stories":
+        {
+          "user_id": "abc123",
+          "is_muted" : false,
+          "stories": [
+            {
+              "story_id": "story1",
+              "story_type" : "media", // "text", "voice"
+              "media_url": "https://example.com/stories/story1.jpg",
+              "media_type": "image", // "video"
+              "duration": 10,
+              "posted_at": "2023-08-21T08:00:00Z",
+              "is_viewed" : true
+            },
+            {
+              "story_id": "story2",
+              "story_type" : "text", // "media", "voice"
+              "media_url": null,
+              "media_type": null,
+              "duration": 10,
+              "posted_at": "2023-08-21T09:00:00Z",
+              "is_viewed" : false
+            },
+          ]
+        },
+
+      {
+          "user_id": "def456",
+          "is_muted" : true,
+          "stories": [
+            //
+          ],
+
+
+      },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+## Create a story {{ tag: 'POST', label: '/v1/story:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to send a new story to your contacts.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="stories" type="object">
+        Unique identifier for your story.
+      </Property>
+      <Property name="story_id" type="string">
+        The message content.
+      </Property>
+      <Property name="viewers" type="object">
+        Penonton story
+      </Property>
+      <Property name="total_views" type="integer">
+        Jumalah penonton story
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/messages">
+
+    ``` js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.messages.send({
+      "stories": {
+        "story_id":"abc123"
+      },
+    })
+
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+          "stories": [
+            {
+              "story_id": "story1",
+              "story_type" : "media", // "text", "voice"
+              "media_url": "https://example.com/stories/story1.jpg",
+              "media_type": "image", // "video"
+              "duration": 10,
+              "posted_at": "2023-08-21T08:00:00Z",
+              "viewers": ["user2", "user3"],
+              "total_views": 35
+            },
+            {
+              "story_id": "story2",
+              "story_type" : "text", // "media", "voice"
+              "media_url": null,
+              "media_type": null,
+              "duration": 10,
+              "posted_at": "2023-08-21T09:00:00Z",
+              "viewers": ["user2", "user3"],
+              "total_views": 30
+            },
+          ]
+
+    ```
+
+  </Col>
+</Row>
+---
+
+## Retrieve a story {{ tag: 'GET', label: '/v1/messages/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a story by providing the user_id. Refer to [the list](#the-story-model) at the top of this page to see which properties are included with story objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/story">
+
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.story.list()
+    ```
+
+
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "received_stories":
+        {
+          "user_id": "abc123",
+          "is_muted" : false,
+          "stories": [
+            {
+              "story_id": "story1",
+              "story_type" : "media", // "text", "voice"
+              "media_url": "https://example.com/stories/story1.jpg",
+              "media_type": "image", // "video"
+              "duration": 10,
+              "posted_at": "2023-08-21T08:00:00Z",
+              "is_viewed" : true
+            },
+            {
+              "story_id": "story2",
+              "story_type" : "text", // "media", "voice"
+              "media_url": null,
+              "media_type": null,
+              "duration": 10,
+              "posted_at": "2023-08-21T09:00:00Z",
+              "is_viewed" : false
+            },
+          ]
+        },
+
+      {
+          "user_id": "def456",
+          "is_muted" : true,
+          "stories": [
+            //
+          ],
+
+
+      },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a story {{ tag: 'DELETE', label: '/v1/story/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete messages from your story. Note: This will permanently delete the story.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/story/abc123">
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.story.delete('abc123')
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>

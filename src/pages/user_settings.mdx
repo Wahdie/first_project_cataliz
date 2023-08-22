@@ -1,0 +1,204 @@
+export const description =
+  'On this page, we’ll dive into the different message endpoints you can use to manage your settings programmatically.'
+
+# User Settings
+
+Conversations are an essential part of Protocol — they are the containers for the messages between you, your contacts, and groups. On this page, we’ll dive into the different conversation endpoints you can use to manage conversations programmatically. We'll look at how to query, create, update, and delete conversations. {{ className: 'lead' }}
+
+## The user settings model
+
+The user settings model contains all the information about the user and give to users to set their profile.
+
+### Properties
+
+<Properties>
+  <Property name="contact_id" type="string">
+    Unique identifier for the other contact in the conversation.
+  </Property>
+  <Property name="username" type="string">
+    Unique identifier for the other contact in the conversation.
+  </Property>
+  <Property name="about" type="string">
+    Unique identifier for the other contact in the conversation.
+  </Property>
+  <Property name="group_id" type="string">
+    Unique identifier for the group that the conversation belongs to.
+  </Property>
+  <Property name="notifications" type="object">
+    Mengatur notifikasi yang diterima user
+  </Property>
+  <Property name="privacy" type="object">
+    Whether or not the conversation has been pinned.
+  </Property>
+  <Property name="theme" type="object">
+    Whether or not the conversation has been muted.
+  </Property>
+  <Property name="chat_wallpaper" type="boolean">
+    Apakah conversation di block atau tidak.
+  </Property>
+  <Property name="media_auto_download" type="object">
+    Waktu conversation di block.
+  </Property>
+</Properties>
+
+---
+
+## List all of user settings {{ tag: 'GET', label: '/v1/user_settings' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to set your profile
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/user_settings">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/user_settings \
+      -H "Authorization: Bearer {token}" \
+      -d active=true \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.user_settings.list()
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "id": "WAz8eIbvDR60rouK",
+          "username": "FrankMcCallister",
+          "phone_number": "1-800-759-3000",
+          "profile_url": "https://assets.protocol.chat/avatars/frank.jpg",
+          "username": "Frank",
+          "about": "Santai dulu",
+          "notifications": {
+            "notif_tone" : null,
+            "vibrate" : false,
+            // ...
+          },
+          "privacy" : {
+            "last_seen" : "nobody",
+            "profile_photo" : "everyone",
+            "status" : null,
+            // ...
+          },
+          "theme" : "dark",
+          "chat_wallpaper" : "black",
+          "media_auto_download" : null,
+          "created_at": 692233200,
+          "blocked_contacts" : [],
+          "language" : "english",
+          "groups":
+            [
+              {
+                "group_id" : "23frujhu4",
+                "name" : "TIF GG",
+                "avatar_url": "https://assets.protocol.chat/avatars/tifgg.jpg",
+                ....
+              },
+              {
+                "group_id" : "33hfopjj4",
+                "name" : "TIF 2021",
+                "avatar_url": "https://assets.protocol.chat/avatars/tif.jpg",
+                ....
+              }
+            ]
+          },
+          "avatar_url" : "",
+          "security" : {
+            "two_step_verification" : {},
+            // .....
+          }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a user settings {{ tag: 'PUT', label: '/v1/user_settings/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to update your settings.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/contacts/WAz8eIbvDR60rouK">
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.user_settings.update('WAz8eIbvDR60rouK', {
+        display_name: 'UncleFrank',
+    })
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+          "id": "WAz8eIbvDR60rouK",
+          "username": "UncleFrank",
+          "phone_number": "1-800-759-3000",
+          "profile_url": "https://assets.protocol.chat/avatars/frank.jpg",
+          "about": "Santai dulu",
+          "notifications": {
+            "notif_tone" : null,
+            "vibrate" : false,
+            // ...
+          },
+          "privacy" : {
+            "last_seen" : "nobody",
+            "profile_photo" : "everyone",
+            "status" : null,
+            // ...
+          },
+          "theme" : "dark",
+          "chat_wallpaper" : "black",
+          "media_auto_download" : null,
+          "created_at": 692233200,
+          "blocked_contacts" : [],
+          "language" : "english",
+          "groups":
+            [
+              {
+                "group_id" : "23frujhu4",
+                "name" : "TIF GG",
+                "avatar_url": "https://assets.protocol.chat/avatars/tifgg.jpg",
+                ....
+              },
+              {
+                "group_id" : "33hfopjj4",
+                "name" : "TIF 2021",
+                "avatar_url": "https://assets.protocol.chat/avatars/tif.jpg",
+                ....
+              }
+            ]
+          },
+          "avatar_url" : "",
+          "security" : {
+            "two_step_verification" : {},
+            // .....
+          }
+    ```
+
+  </Col>
+</Row>

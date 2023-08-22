@@ -1,0 +1,262 @@
+export const description =
+  'On this page, we’ll dive into the different message endpoints you can use to manage calls programmatically.'
+
+# Calls
+
+Calls are what conversations are made of in Protocol — they are the basic building blocks of your conversations with your Protocol contacts. On this page, we'll dive into the different message endpoints you can use to manage calls programmatically. We'll look at how to query, send, update, and delete calls. {{ className: 'lead' }}
+
+## The call model
+
+The call model contains all the information about the calls and attachments you send to your contacts and groups, including how your contacts have reacted to them.
+
+### Properties
+
+<Properties>
+  <Property name="id" type="string">
+    Unique identifier for the call.
+  </Property>
+  <Property name="conversation_id" type="string">
+    Unique identifier for the conversation.
+  </Property>
+  <Property name="caller" type="array">
+    The contact array for the caller that join the call.
+  </Property>
+  <Property name="group" type="object">
+    The group object for the groups call
+  </Property>
+  <Property name="created_at" type="timestamp">
+    Timestamp of when the message was created.
+  </Property>
+
+</Properties>
+
+---
+
+## List all calls {{ tag: 'GET', label: '/v1/calls' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a list of all your calls (in a conversation if a conversation id is provided)
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="conversation_id" type="string">
+        Limit to calls from a given conversation.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/calls">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/calls \
+      -H "Authorization: Bearer {token}" \
+      -d conversation_id=xgQQXg3hrtjh7AvZ \
+      -d limit=10
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.calls.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.calls.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->calls->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+            {
+                  "id": "gWqY86BMFRiH5o11",
+                  "conversation_id": "xgQQXg3hrtjh7AvZ",
+                  "caller": [
+                  {
+                        "id": "inEIRvzjC6YLMX3o",
+                        "username": "LinnieMcCallister",
+                        "phone_number": "1-800-759-3000",
+                        "avatar_url": "https://assets.protocol.chat/avatars/linnie.jpg",
+                        "last_active_at": 705103200,
+                        "created_at": 692233200
+                  },
+                  {
+                        "id": "inEIRvzjC6YLMX3o",
+                        "username": "Rodrigo",
+                        "phone_number": "1-888-759-3099",
+                        "avatar_url": "https://assets.protocol.chat/avatars/linnie.jpg",
+                        "last_active_at": 705103200,
+                        "created_at": 692233200
+                  }
+                  ],
+                  "group" : {},
+                  "status": "ended",
+                  "start_time": "2023-08-21T10:00:00Z",
+                  "end_time": "2023-08-21T10:15:00Z",
+                  }
+                  ]
+            },
+            {
+                  // panggilan lain
+            }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a call {{ tag: 'POST', label: '/v1/calls' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to create a call to one of your conversations.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="conversation_id" type="string">
+        Unique identifier for the conversation the message belongs to.
+      </Property>
+      <Property name="call_id" type="string">
+        The message content.
+      </Property>
+      <Property name="call_type" type="string">
+        The call type, video or voice only.
+      </Property>
+    </Properties>
+
+
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/messages">
+
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.calls.send({
+      conversation_id: 'xgQQXg3hrtjh7AvZ',
+      call_type: 'video_call',
+    })
+    ```
+
+ 
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "gWqY86BMFRiH5o11",
+      "conversation_id": "xgQQXg3hrtjh7AvZ",
+      "contact": {
+        "id": "inEIRvzjC6YLMX3o",
+        "username": "LinnieMcCallister",
+        "phone_number": "1-800-759-3000",
+        "avatar_url": "https://assets.protocol.chat/avatars/linnie.jpg",
+        "last_active_at": 705103200,
+        "created_at": 692233200
+      },
+      "call_type" : "video_call",
+      "created_at": 692233200
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a call {{ tag: 'GET', label: '/v1/calls/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a calls by providing the call id. Refer to [the list](#the-call-model) at the top of this page to see which properties are included with call objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/call/SIuAFUNKdSYHZF2w">
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.call.get('SIuAFUNKdSYHZF2w')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "SIuAFUNKdSYHZF2w",
+      "conversation_id": "xgQQXg3hrtjh7AvZ",
+      "contact": {
+        "id": "WAz8eIbvDR60rouK",
+        "username": "KevinMcCallister",
+        "phone_number": "1-800-759-3000",
+        "avatar_url": "https://assets.protocol.chat/avatars/kevin.jpg",
+        "last_active_at": 705103200,
+        "created_at": 692233200
+      },
+      "groups": { },
+      "call_type" : "voice_call", // atau "video_call"
+      "created_at": 692233200,
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a list of call {{ tag: 'DELETE', label: '/v1/calls/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete your list of call in Protocol. Note: This will permanently delete the list of call.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/calls/xgQQXg3hrtjh7AvZ">
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.calls.delete('xgQQXg3hrtjh7AvZ')
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
+
