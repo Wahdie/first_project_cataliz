@@ -62,6 +62,18 @@ const resources = [
       squares: [[0, 1]],
     },
   },
+  {
+    href: '/attachments',
+    name: 'Attachments',
+    description:
+      'Learn about the attachments model and how to create, retrieve, update, and delete attachments',
+    icon: UsersIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
+  
 ]
 
 function ResourceIcon({ icon: Icon }) {
