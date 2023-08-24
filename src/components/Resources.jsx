@@ -62,6 +62,39 @@ const resources = [
       squares: [[0, 1]],
     },
   },
+    {
+    href: '/attachments',
+    name: 'Attachments',
+    description:
+      'Learn about the attachments community and how to create, retrieve, update, and delete attachments.',
+    icon: Attachments,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
+  {
+    href: '/story',
+    name: 'Story',
+    description:
+      'Learn about the story model and how to create, retrieve, update, delete, and list story.',
+    icon: UsersIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
+  {
+    href: '/community',
+    name: 'Community',
+    description:
+      'Learn about the community community and how to create, retrieve, update, delete, and list communities.',
+    icon: UsersIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
 ]
 
 function ResourceIcon({ icon: Icon }) {
